@@ -1,0 +1,23 @@
+syntax = "proto3";  // proto buffers 版本
+//option go_package = "path;name" path是go文件生成存放，name是包名
+option go_package = "../api";
+package api;
+
+
+message Post{
+  int64 id = 1;
+  string title = 2;
+  string content = 3;
+  string desc = 4;
+  optional string flags = 5;
+}
+message PostReq{
+  int64 id = 1;
+}
+message PostReply{
+  int64 id = 1;
+
+}
+service PostService{
+  rpc getPost(PostReq)returns (PostReply);
+}
