@@ -1,0 +1,12 @@
+syntax = "proto3";  // proto buffers 版本
+//option go_package = "path;name" path是go文件生成存放，name是包名
+option go_package = "../protobuffer/service";
+package service;
+
+message SearchRequest {
+  string query = 1;  // [] type type_name = identifier
+  int32 page_number = 2;
+  int32 result_per_page = 3;
+  optional int32 id = 4;  //可以为空
+  repeated string addresses = 5; // repeated可以多个
+}
