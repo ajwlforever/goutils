@@ -1,4 +1,4 @@
-package main
+package caches
 
 import (
 	"fmt"
@@ -113,14 +113,14 @@ func New(cap int) LRUCache {
 	}
 }
 
-func main() {
-	c := New(2)
-	c.Put(1, 1)
-	c.Put(2, 2)
-	c.Get(1)
-	c.Put(3, 3)
-	c.Get(1)
-	c.Put(1, 1)
-	c.Put(4, 4)
-	c.Get(3)
-}
+//func main() {
+//	c := New(2)
+//	c.Put(1, 1)
+//	c.Put(2, 2)
+//	c.Get(1)
+//	c.Put(3, 3)
+//	c.Get(1)
+//	c.Put(1, 1)
+//	c.Put(4, 4)
+//	c.Get(3)
+//}

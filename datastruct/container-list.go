@@ -1,4 +1,4 @@
-package main
+package datastruct
 
 import (
 	list2 "container/list"

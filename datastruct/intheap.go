@@ -1,4 +1,4 @@
-package main
+package datastruct
 
 import (
 	"container/heap"
@@ -39,5 +39,4 @@ func main() {
 	heap.Push(h, 5)
 	fmt.Println(h)
 	fmt.Println(heap.Pop(h))
-
 }

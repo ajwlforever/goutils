@@ -9,7 +9,27 @@ static void SayHello(const char* s) {
 }
 */
 import "C"
+import "fmt"
 
 func main() {
-	C.SayHello(C.CString("Hello, World\n"))
+
+	i := make(chan int, 2)
+	go func() {
+		for i := 0; i < 100; i++ {
+			fmt.Println(i)
+		}
+		i <- 1
+	}()
+	go func() {
+		for i := 0; i < 100; i++ {
+			fmt.Println(i)
+		}
+
+	}()
+	for i := 0; i < 1000; i++ {
+		fmt.Println("ssss")
+	}
+
+	<-i
+	<-i
 }
