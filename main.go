@@ -28,6 +28,5 @@ func main() {
 	}()
 	<-done
 	fmt.Println("sss")
-	append()
 
 }
