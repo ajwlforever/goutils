@@ -124,6 +124,7 @@ func (lfu *LFUCache) deleteMinCnt() error {
 
 func (lfu LFUCache) lazyDelete() error {
 	// TODO
+
 	return nil
 }
 
