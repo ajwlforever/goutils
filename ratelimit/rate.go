@@ -83,7 +83,7 @@ func (lim *Limiter2) Burst() int {
 
 // NewLimiter returns a new Limiter2 that allows events up to rate r and permits
 // bursts of at most b tokens.
-func NewLimiter(r Limit, b int) *Limiter2 {
+func NewLimiter1(r Limit, b int) *Limiter2 {
 	return &Limiter2{
 		limit: r,
 		burst: b,

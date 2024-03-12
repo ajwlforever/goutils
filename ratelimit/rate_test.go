@@ -2,19 +2,21 @@ package ratelimit
 
 import (
 	"fmt"
+	"io"
+	"net/http"
 	"testing"
 	"time"
 )
 
 func doA(limit Limiter) {
-	if !limit.TryAcquire().ok {
+	if !limit.TryAcquire().Ok {
 		fmt.Println("reject")
 	}
 	fmt.Println("do")
 }
 
 func TestFixedWindow1(t *testing.T) {
-	interval := time.Microsecond * 100 // 0.1s
+	interval := time.Millisecond * 100 // 0.1s
 	ticker := time.NewTicker(interval)
 	// 1s 5个请求
 	limiter := NewFixedWindowLimiter(time.Second, 5)
@@ -22,12 +24,24 @@ func TestFixedWindow1(t *testing.T) {
 	for range ticker.C {
 		doA(limiter)
 		cnt += 1
-		if cnt == 100 {
+		if cnt == 1000 {
 			ticker.Stop()
 			break
 		}
 	}
 
+}
+
+func TestFixedWindow2(t *testing.T) {
+	http.HandleFunc("/h", func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "text/html")
+		io.WriteString(w, "<h1>hello, world</h1>")
+	})
+
+	http.ListenAndServe("0.0.0.0:8080", nil)
+	for {
+		time.Sleep(time.Second)
+	}
 }
 
 func TestTime(t *testing.T) {
@@ -51,5 +65,13 @@ func TestTimer(t *testing.T) {
 		<-timer.C
 		fmt.Println("timer")
 		timer.Reset(time.Second)
+	}
+}
+
+func TestTicker(t *testing.T) {
+	ticker := time.NewTicker(time.Second)
+	for range ticker.C {
+		fmt.Println("timer")
+		ticker.Reset(time.Second)
 	}
 }

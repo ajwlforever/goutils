@@ -11,9 +11,8 @@ import (
 // FixedWindowLimiter
 type FixedWindowLimiter struct {
 	UnitTime time.Duration // 窗口时间
-	// LastReqTime time.Time     // 本次窗口的开启时间
-	Count    int // 实际的请求数量
-	MaxCount int // number 窗口期允许请求的数量
+	Count    int           // 实际的请求数量
+	MaxCount int           // number 窗口期允许请求的数量
 	mu       sync.Mutex
 }
 
@@ -22,7 +21,6 @@ func NewFixedWindowLimiter(unitTime time.Duration, maxCount int) *FixedWindowLim
 
 	f := &FixedWindowLimiter{
 		UnitTime: unitTime,
-		//	LastReqTime: time.Now().Add(-unitTime),
 		Count:    0,
 		MaxCount: maxCount,
 	}
@@ -32,18 +30,17 @@ func NewFixedWindowLimiter(unitTime time.Duration, maxCount int) *FixedWindowLim
 }
 
 func (f *FixedWindowLimiter) resetWindow() {
-	ticker := time.NewTicker(f.UnitTime)
 	defer func() {
 		if x := recover(); x != nil {
 			fmt.Printf("Failed to reset window: %v", x)
 			go f.resetWindow()
 		}
 	}()
+	ticker := time.NewTicker(f.UnitTime)
 	fmt.Println("resetWindow")
 	for range ticker.C {
-
 		f.mu.Lock()
-		fmt.Println("reset window")
+		//fmt.Println("reset window")
 		f.Count = 0
 		// f.LastReqTime = time.Now().Add(-f.UnitTime)
 		f.mu.Unlock()
@@ -55,21 +52,14 @@ func (limiter *FixedWindowLimiter) TryAcquire() (res LimitResult) {
 	limiter.mu.Lock()
 	defer limiter.mu.Unlock()
 
-	// now := time.Now()
-	// if now.Sub(limiter.LastReqTime) > limiter.UnitTime {
-	// 	// 窗口期到  -- 》 重置
-	// 	limiter.Count = 0
-	// 	limiter.LastReqTime = now
-	// }
-
 	if limiter.Count < limiter.MaxCount {
 		limiter.Count += 1
-		res.ok = true
+		res.Ok = true
 		return
 	}
 
 	// curTime := time.Now()
-	res.ok = false
+	res.Ok = false
 	return
 
 }

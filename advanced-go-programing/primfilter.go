@@ -1,8 +1,7 @@
-package main
+package advancedgoprograming
 
 import (
 	"fmt"
-	"time"
 )
 
 func worker(cancel chan bool) {
@@ -17,13 +16,13 @@ func worker(cancel chan bool) {
 	}
 }
 
-func main() {
-	cancel := make(chan bool)
+// func main() {
+// 	cancel := make(chan bool)
 
-	for i := 0; i < 10; i++ {
-		go worker(cancel)
-	}
+// 	for i := 0; i < 10; i++ {
+// 		go worker(cancel)
+// 	}
 
-	time.Sleep(time.Second)
-	close(cancel)
-}
+// 	time.Sleep(time.Second)
+// 	close(cancel)
+// }
