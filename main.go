@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"github.com/ajwlforever/goutils/network"
 	"time"
+
+	"github.com/ajwlforever/goutils/network"
 )
 
 func NetWork1() {
@@ -28,6 +29,5 @@ func main() {
 	}()
 	<-done
 	fmt.Println("sss")
-	append()
 
 }
