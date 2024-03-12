@@ -29,18 +29,18 @@ func Every(interval time.Duration) Limit {
 	return 1 / Limit(interval.Seconds())
 }
 
-// A Limiter controls how frequently events are allowed to happen.
+// A Limiter2 controls how frequently events are allowed to happen.
 // It implements a "token bucket" of size b, initially full and refilled
 // at rate r tokens per second.
-// Informally, in any large enough time interval, the Limiter limits the
+// Informally, in any large enough time interval, the Limiter2 limits the
 // rate to r tokens per second, with a maximum burst size of b events.
 // As a special case, if r == Inf (the infinite rate), b is ignored.
 // See https://en.wikipedia.org/wiki/Token_bucket for more about token buckets.
 //
-// The zero value is a valid Limiter, but it will reject all events.
+// The zero value is a valid Limiter2, but it will reject all events.
 // Use NewLimiter to create non-zero Limiters.
 //
-// Limiter has three main methods, Allow, Reserve, and Wait.
+// Limiter2 has three main methods, Allow, Reserve, and Wait.
 // Most callers should use Wait.
 //
 // Each of the three methods consumes a single token.
@@ -52,7 +52,7 @@ func Every(interval time.Duration) Limit {
 // or its associated context.Context is canceled.
 //
 // The methods AllowN, ReserveN, and WaitN consume n tokens.
-type Limiter struct {
+type Limiter2 struct {
 	//maximum token, token num per second
 	limit Limit
 	//burst field, max token num
@@ -67,7 +67,7 @@ type Limiter struct {
 }
 
 // Limit returns the maximum overall event rate.
-func (lim *Limiter) Limit() Limit {
+func (lim *Limiter2) Limit() Limit {
 	lim.mu.Lock()
 	defer lim.mu.Unlock()
 	return lim.limit
@@ -77,36 +77,36 @@ func (lim *Limiter) Limit() Limit {
 // that can be consumed in a single call to Allow, Reserve, or Wait, so higher
 // Burst values allow more events to happen at once.
 // A zero Burst allows no events, unless limit == Inf.
-func (lim *Limiter) Burst() int {
+func (lim *Limiter2) Burst() int {
 	return lim.burst
 }
 
-// NewLimiter returns a new Limiter that allows events up to rate r and permits
+// NewLimiter returns a new Limiter2 that allows events up to rate r and permits
 // bursts of at most b tokens.
-func NewLimiter(r Limit, b int) *Limiter {
-	return &Limiter{
+func NewLimiter(r Limit, b int) *Limiter2 {
+	return &Limiter2{
 		limit: r,
 		burst: b,
 	}
 }
 
 // Allow is shorthand for AllowN(time.Now(), 1).
-func (lim *Limiter) Allow() bool {
+func (lim *Limiter2) Allow() bool {
 	return lim.AllowN(time.Now(), 1)
 }
 
 // AllowN reports whether n events may happen at time now.
 // Use this method if you intend to drop / skip events that exceed the rate limit.
 // Otherwise use Reserve or Wait.
-func (lim *Limiter) AllowN(now time.Time, n int) bool {
+func (lim *Limiter2) AllowN(now time.Time, n int) bool {
 	return lim.reserveN(now, n, 0).ok
 }
 
-// A Reservation holds information about events that are permitted by a Limiter to happen after a delay.
-// A Reservation may be canceled, which may enable the Limiter to permit additional events.
+// A Reservation holds information about events that are permitted by a Limiter2 to happen after a delay.
+// A Reservation may be canceled, which may enable the Limiter2 to permit additional events.
 type Reservation struct {
 	ok     bool
-	lim    *Limiter
+	lim    *Limiter2
 	tokens int
 	//This is the time to action
 	timeToAct time.Time
@@ -189,13 +189,13 @@ func (r *Reservation) CancelAt(now time.Time) {
 }
 
 // Reserve is shorthand for ReserveN(time.Now(), 1).
-func (lim *Limiter) Reserve() *Reservation {
+func (lim *Limiter2) Reserve() *Reservation {
 	return lim.ReserveN(time.Now(), 1)
 }
 
 // ReserveN returns a Reservation that indicates how long the caller must wait before n events happen.
-// The Limiter takes this Reservation into account when allowing future events.
-// ReserveN returns false if n exceeds the Limiter's burst size.
+// The Limiter2 takes this Reservation into account when allowing future events.
+// ReserveN returns false if n exceeds the Limiter2's burst size.
 // Usage example:
 //
 //	r, ok := lim.ReserveN(time.Now(), 1)
@@ -208,20 +208,20 @@ func (lim *Limiter) Reserve() *Reservation {
 // Use this method if you wish to wait and slow down in accordance with the rate limit without dropping events.
 // If you need to respect a deadline or cancel the delay, use Wait instead.
 // To drop or skip events exceeding rate limit, use Allow instead.
-func (lim *Limiter) ReserveN(now time.Time, n int) *Reservation {
+func (lim *Limiter2) ReserveN(now time.Time, n int) *Reservation {
 	r := lim.reserveN(now, n, InfDuration)
 	return &r
 }
 
 // Wait is shorthand for WaitN(ctx, 1).
-func (lim *Limiter) Wait(ctx context.Context) (err error) {
+func (lim *Limiter2) Wait(ctx context.Context) (err error) {
 	return lim.WaitN(ctx, 1)
 }
 
 // WaitN blocks until lim permits n events to happen.
-// It returns an error if n exceeds the Limiter's burst size, the Context is
+// It returns an error if n exceeds the Limiter2's burst size, the Context is
 // canceled, or the expected wait time exceeds the Context's Deadline.
-func (lim *Limiter) WaitN(ctx context.Context, n int) (err error) {
+func (lim *Limiter2) WaitN(ctx context.Context, n int) (err error) {
 	if n > lim.burst {
 		return fmt.Errorf("rate: Wait(n=%d) exceeds limiter's burst %d", n, lim.burst)
 	}
@@ -258,14 +258,14 @@ func (lim *Limiter) WaitN(ctx context.Context, n int) (err error) {
 }
 
 // SetLimit is shorthand for SetLimitAt(time.Now(), newLimit).
-func (lim *Limiter) SetLimit(newLimit Limit) {
+func (lim *Limiter2) SetLimit(newLimit Limit) {
 	lim.SetLimitAt(time.Now(), newLimit)
 }
 
 // SetLimitAt sets a new Limit for the limiter. The new Limit, and Burst, may be violated
 // or underutilized by those which reserved (using Reserve or Wait) but did not yet act
 // before SetLimitAt was called.
-func (lim *Limiter) SetLimitAt(now time.Time, newLimit Limit) {
+func (lim *Limiter2) SetLimitAt(now time.Time, newLimit Limit) {
 	lim.mu.Lock()
 	defer lim.mu.Unlock()
 	now, _, tokens := lim.advance(now)
@@ -277,7 +277,7 @@ func (lim *Limiter) SetLimitAt(now time.Time, newLimit Limit) {
 // reserveN is a helper method for AllowN, ReserveN, and WaitN.
 // maxFutureReserve specifies the maximum reservation wait duration allowed.
 // reserveN returns Reservation, not *Reservation, to avoid allocation in AllowN and WaitN.
-func (lim *Limiter) reserveN(now time.Time, n int, maxFutureReserve time.Duration) Reservation {
+func (lim *Limiter2) reserveN(now time.Time, n int, maxFutureReserve time.Duration) Reservation {
 	lim.mu.Lock()
 	defer lim.mu.Unlock()
 	if lim.limit == Inf {
@@ -321,7 +321,7 @@ func (lim *Limiter) reserveN(now time.Time, n int, maxFutureReserve time.Duratio
 
 // advance calculates and returns an updated state for lim resulting from the passage of time.
 // lim is not changed.
-func (lim *Limiter) advance(now time.Time) (newNow time.Time, newLast time.Time, newTokens float64) {
+func (lim *Limiter2) advance(now time.Time) (newNow time.Time, newLast time.Time, newTokens float64) {
 	last := lim.last
 	if now.Before(last) {
 		last = now

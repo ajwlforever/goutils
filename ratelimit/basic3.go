@@ -84,11 +84,11 @@ func (limiter *TokenRateLimiter1) acquire() (token string) {
 	limiter.Lock.Lock()
 	defer limiter.Lock.Unlock()
 	if limiter.tryAcquire() {
-		// 给予令牌 
-		return 
+		// 给予令牌
+		return
 	}
-	if 
-	// 
 
-	return 
+	//
+
+	return
 }
