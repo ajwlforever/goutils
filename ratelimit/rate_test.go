@@ -3,16 +3,25 @@ package ratelimit
 import (
 	"fmt"
 	"io"
+	"math/rand"
 	"net/http"
 	"testing"
 	"time"
 )
 
+var c int64
+var rejcetCnt int64
+var acCnt int64
+
 func doA(limit Limiter) {
+	c += 1
 	if !limit.TryAcquire().Ok {
-		fmt.Println("reject")
+		//fmt.Println("reject")
+		rejcetCnt += 1
+		return
 	}
-	fmt.Println("do")
+	acCnt += 1
+	//fmt.Println("do")
 }
 
 func TestFixedWindow1(t *testing.T) {
@@ -73,5 +82,34 @@ func TestTicker(t *testing.T) {
 	for range ticker.C {
 		fmt.Println("timer")
 		ticker.Reset(time.Second)
+	}
+}
+
+func TestCalulateWindowCnt(t *testing.T) {
+	s := calculateWindowCount(time.Hour, time.Millisecond*33)
+	fmt.Println(s)
+}
+
+func TestSlidWindowLimiter(t *testing.T) {
+	c = 0
+	rejcetCnt = 0
+	acCnt = 0
+	limiter := NewSlideWindowLimiter(time.Second, time.Millisecond*100, 100)
+
+	for i := 0; i < 20; i++ {
+		go doACircu(limiter)
+	}
+	time.Sleep(time.Second * 10)
+	fmt.Println("all count:", c)
+	fmt.Println("rejectCount:", rejcetCnt)
+	fmt.Println("accesscCount:", acCnt)
+	fmt.Println("ac+rej:", acCnt+rejcetCnt)
+
+}
+
+func doACircu(limiter Limiter) {
+	ticker := time.NewTicker(time.Microsecond * (100 + time.Duration(rand.Int31n(100))))
+	for range ticker.C {
+		doA(limiter)
 	}
 }

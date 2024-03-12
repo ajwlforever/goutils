@@ -12,9 +12,18 @@ type LimitResult struct {
 	Ok bool
 }
 
-func WithFixedWindowLimiter(unitTime time.Duration, count int) LimiterOption {
+// 创建固定窗口限流器的Option
+func WithFixedWindowLimiter(unitTime time.Duration, maxCount int) LimiterOption {
 	return func() Limiter {
-		limiter := NewFixedWindowLimiter(unitTime, count)
+		limiter := NewFixedWindowLimiter(unitTime, maxCount)
+		return limiter
+	}
+}
+
+// 创建滑动窗口限流器的Option
+func WithSlideWindowLimiter(unitTime time.Duration, smallUnitTime time.Duration, maxCount int) LimiterOption {
+	return func() Limiter {
+		limiter := NewSlideWindowLimiter(unitTime, smallUnitTime, maxCount)
 		return limiter
 	}
 }
@@ -23,7 +32,7 @@ func NewLimiter(option LimiterOption) Limiter {
 	return option()
 }
 
-// Record 限流情况全部记录下来。
+// LimiterRecord 限流情况全部记录下来。
 // todo
-type Record struct {
+type LimiterRecord struct {
 }
