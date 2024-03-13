@@ -113,3 +113,9 @@ func doACircu(limiter Limiter) {
 		doA(limiter)
 	}
 }
+
+func TestSllep(t *testing.T) {
+	fmt.Println(time.Now())
+	time.Sleep(time.Second * 2)
+	fmt.Println(time.Now())
+}

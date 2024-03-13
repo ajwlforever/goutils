@@ -48,6 +48,7 @@ func FixedWindowLimiteroptionTest() {
 	l = ratelimit.NewLimiter(ratelimit.WithFixedWindowLimiter(time.Second, 1))
 
 	http.HandleFunc("/h", handleHello1)
+
 	http.ListenAndServe("0.0.0.0:8080", nil)
 
 }
@@ -57,8 +58,11 @@ func main() {
 	//network.FetchURL("https://www.jb51.net/softs/708254.html")
 	//
 	// network.StartWeb()
-	FixedWindowLimiteroptionTest()
+	// FixedWindowLimiteroptionTest()
+
+	ratelimit.StartWeb()
 	for {
 		time.Sleep(time.Second)
 	}
+
 }

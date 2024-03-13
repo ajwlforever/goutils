@@ -46,7 +46,7 @@ func (s *SlideWindowLimiter) slideWindow() {
 		s.Count -= s.Cnts[s.Index]
 		s.Cnts[s.Index] = 0
 		s.Index++
-		fmt.Println(s.Count)
+		// fmt.Println(s.Count)
 		if s.Index >= len(s.Cnts) {
 			s.Index = 0
 		}
