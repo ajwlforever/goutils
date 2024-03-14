@@ -1,4 +1,4 @@
-package redisgo
+package ratelimit
 
 import (
 	"context"
@@ -26,6 +26,10 @@ func (r *LimitProlicy) toParams() []string {
 	res = append(res, string(r.maxCount))
 	res = append(res, string(r.initTokens))
 	return res
+}
+
+func (r *RedisTokenLimiter) TryAcquire(key string) {
+
 }
 
 func NewRedisTokenLimiter(polices ...LimitProlicy) {
