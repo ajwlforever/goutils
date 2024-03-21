@@ -1,6 +1,7 @@
 package redisgo
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"os"
@@ -14,7 +15,7 @@ func Script1() {
 	s, _ := io.ReadAll(f)
 
 	IncrByXX := redis.NewScript(string(s))
-
+	ctx := context.Background()
 	n, err := IncrByXX.Run(ctx, rdb, []string{"xx_counter"}, 2).Result()
 	fmt.Println(n, err)
 

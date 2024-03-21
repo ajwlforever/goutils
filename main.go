@@ -1,68 +1,30 @@
 package main
 
-import (
-	"io"
-	"net/http"
-	"time"
+type F interface {
+	f()
+}
+type s1 struct{}
 
-	"github.com/ajwlforever/goutils/network"
-	"github.com/ajwlforever/goutils/ratelimit"
-)
+func (s s1) f() {}
 
-func NetWork1() {
-	go network.StartServer()
-	network.StartClient()
-
-	time.Sleep(10000)
-
+type s2 struct {
 }
 
-var limiter *ratelimit.FixedWindowLimiter
-var l ratelimit.Limiter
-
-func handleHello(w http.ResponseWriter, r *http.Request) {
-	if !limiter.TryAcquire().Ok {
-		w.WriteHeader(http.StatusTooManyRequests)
-		return
-	}
-	w.Header().Set("Content-Type", "text/html")
-	io.WriteString(w, "<h1>hello, world</h1>")
+func (s *s2) f() {
 }
 
-func FixedWindowLimiterTest() {
-	limiter = ratelimit.NewFixedWindowLimiter(time.Second, 1)
-	http.HandleFunc("/h", handleHello)
-	http.ListenAndServe("0.0.0.0:8080", nil)
+func msin() {
+	s1Val := s1{}
+	s1Ptr := &s1{}
+	s21 := s2{}
+	s22 := &s2{}
 
-}
+	var i F
+	i = s1Val
+	i = s1Ptr
+	i = s21
+	i = s22
 
-func handleHello1(w http.ResponseWriter, r *http.Request) {
-	if !l.TryAcquire().Ok {
-		w.WriteHeader(http.StatusTooManyRequests)
-		return
-	}
-	w.Header().Set("Content-Type", "text/html")
-	io.WriteString(w, "<h1>Ooption mode</h1>")
-}
-func FixedWindowLimiteroptionTest() {
-	l = ratelimit.NewLimiter(ratelimit.WithFixedWindowLimiter(time.Second, 1))
-
-	http.HandleFunc("/h", handleHello1)
-
-	http.ListenAndServe("0.0.0.0:8080", nil)
-
-}
-
-func main() {
-	// network.PollURL()
-	//network.FetchURL("https://www.jb51.net/softs/708254.html")
-	//
-	// network.StartWeb()
-	// FixedWindowLimiteroptionTest()
-
-	ratelimit.StartWeb()
-	for {
-		time.Sleep(time.Second)
-	}
+	_ = i
 
 }
