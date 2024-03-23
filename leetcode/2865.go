@@ -1,4 +1,4 @@
-package main
+package leetcode
 
 func maximumSumOfHeights(maxHeights []int) int64 {
 	var cnt int64 = 0

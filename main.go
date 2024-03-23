@@ -1,17 +1,18 @@
 package main
 
-import (
-	"fmt"
-	"github.com/ajwlforever/goutils/network"
-	"time"
-)
+import "fmt"
 
-func NetWork1() {
-	go network.StartServer()
-	network.StartClient()
+type F interface {
+	f()
+}
+type s1 struct{}
 
-	time.Sleep(10000)
+func (s s1) f() {}
 
+type s2 struct {
+}
+
+func (s *s2) f() {
 }
 
 func main() {

@@ -2,7 +2,7 @@
 *
   - Definition for a binary tree node.
 */
-package main
+package leetcode
 
 import (
 	"fmt"

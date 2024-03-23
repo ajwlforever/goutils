@@ -1,4 +1,4 @@
-package main
+package leetcode
 
 func stoneGameVI(aliceValues []int, bobValues []int) int {
 	diff := aliceValues
