@@ -1,0 +1,24 @@
+\begin{itemize}
+    \item \( P, M \models p \) iff \( p \in h(M) \);
+    \item \( P, M \models \neg\phi \) iff \( P, M \not\models \phi \);
+    \item \( P, M \models \phi_1 \vee \phi_2 \) iff \( P, M \models \phi_1 \) or \( P, M \models \phi_2 \);
+%  AX
+    \item \( P, M \models \langle\langle A \rangle\rangle X\Phi \) iff there exists a strategy $\theta$ such that for all M'$(P,M\overset{l}{\rightarrow} P', M' \; and \; l\in  \theta)$ implies \( P', M' \models \Phi \);
+%  AG
+    \item \(P, M \models \langle\langle A \rangle\rangle G\Phi\) iff for all \(\theta \in Strs(A)\), for all states \(M'\) with \(M \overset{\theta}{\rightarrow} M'\), for all \(\pi \in Paths(M')\) and for all \(j \geq 0\), \(P', \pi(j) \models \Phi\).
+% AU
+    \item \( P, M \models \langle\langle A \rangle\rangle \Phi_1 U \Phi_2 \) iff there exists a strategy $\theta \in$ Strs(A) such that for all \( M' \in Out(M, \theta) \) and for all \( j \geq 0 \) if \( P, \pi(j) \models \Phi_2 \) then for all \( 0 \leq i < j \), \( P', \pi(i) \models \Phi_1 \).
+% AUK
+     \item \( P, M \models \langle\langle A \rangle\rangle \Phi_1 U^{ \leqslant k } \Phi_2 \) iff there exists a strategy $\theta \in$ Strs(A) such that for all \( M' \in Out(M, \theta) \) and for all \( 0 \leqslant  j \leqslant k \) if \( P, \pi(j) \models \Phi_2 \) then for all \( 0 \leq i < j \), \( P', \pi(i) \models \Phi_1 \).
+% K
+    \item  \( P, M\models K_i \psi \) iff \( \forall M' \in R(M,i) \; all \;have\; P',M' \models \psi\);
+% E
+    \item \( P, M\models E \psi \) iff \( \forall i \in n, \;\; P, M \models K_i\psi \);
+%  C
+    \item     P, M$\models$ C$\psi$  iff \; $\forall i \in n$,$\bigcup_{1\leq i\leq n}^{*} M' \in R^(M,i)$ ,  where  *   denotes   the   transitive  closure  of  the   relation  R , all   have $P', M' \models K_i\psi$;
+%  D
+    \item P, M$\models$ D$\psi$  iff \; $\forall$$ M' \in R^(M)$ , all   have $P', M' \models K_i\psi$;
+\end{itemize}    
+\end{definition}
+
+\subsection{ symbolic model checking for $ATL_E$(B)}

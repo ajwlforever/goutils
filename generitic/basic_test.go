@@ -58,3 +58,7 @@ func BenchmarkCompare2(b *testing.B) {
 		ints = IntSliceInsert(ints, 2, i)
 	}
 }
+
+func TestUse1(t *testing.T) {
+	GenericsUse1(P1{})
+}

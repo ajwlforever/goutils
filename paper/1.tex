@@ -1,0 +1,32 @@
+\begin{definition}(IS).\textbf Let \( \text{Agt} = \{1,\ldots,k\} \) be a set of agents and \( \text{AP} \) be a set of atomic propositions. IS is defined as a tuple:
+    \[ IS = (S_i, Ac_i, \eta_i, \delta_i, S_i^0, L_i) \text{ for } i \in \text{Agt}. \]
+    
+    Specifically,
+    \begin{itemize}
+        \item \( S_i \) is the set of states of agent \( i \), and the combined states of the system are denoted by \( S_1 \times S_k \). \( S \) is the set of all possible system states. The actual system state \( g \in S_i(g) \) for each agent \( i \) is represented by \( g \in S \), and the individual states of agents are denoted as \( g = g_1 \times \ldots \times g_k \).
+        \item \( Ac_i \) is the set of actions available to agent \( i \), and \( Ac = Ac_1 \times \ldots \times Ac_k \) represents the set of joint actions. The actual joint action is \( \alpha = (a_1,\ldots,a_k) \in Ac_1 \times \ldots \times Ac_k \), where \( \alpha(i) \) denotes the action of agent \( i \).
+        \item \( \eta_i: S_i \rightarrow 2^{Ac_i} \) is the function that assigns to each state \( s \) of agent \( i \) a set of actions \( a, \eta_i(s) \) for agent \( i \) in state \( s \), and the joint actions are represented by \( \eta_1(g) = \eta_1(g(i)) \). The set of feasible joint actions for the system state \( g \) is \( \eta_1(g) \times \ldots \times \eta_k(g) \).
+        \item \( \delta_i: S_i \times Ac_i \rightarrow S_i \) is the transition function of agent \( i \), which determines the transition to the next state based on the joint actions. For a state \( s \) of agent \( i \) and a joint action \( \alpha \), the new state is \( \delta_i(s, \alpha) \), and the system transition is represented by \( \delta(g) = \delta_1(g_1, \alpha_1) \times \ldots \times \delta_k(g_k, \alpha_k) \).
+        \item \( S_i^0 \subsetes S_i \) is the set of initial states of agent \( i \), and \( S_0 \) is the combined initial states of the system \( S_1^0 \times \ldots \times S_k^0 \).
+        \item \( L_i: \text{AP} \rightarrow 2^S \) is the labeling function, which labels each system state \( g \) with the set of propositions \( p, g \in L(p) \) that are true in the system state \( g \).
+    \end{itemize}    
+    \end{definition}
+
+
+
+\begin{definition}(CSG). A concurrent game structure for a set \( \text{AP} \) of atomic propositions, CGS is a tuple: \( G = (S, S_0, \text{Agt}, \text{Ac}, \sim, \delta, L) \). Specifically,
+
+\begin{itemize}
+    \item \( S \) is the set of states;
+    \item \( S_0 \subsetes S \) is the set of initial states;
+    \item \( \text{Agt} = \{1,...,k\} \) is the set of agents;
+    \item \( \text{Ac} \) is the set of actions;
+    \item \( \sim \) is the compatibility relation on \( S \times S \), where \( g \sim g' \) means state \( g \) is compatible with \( g' \) and thus \( g \) can transition to \( g' \);
+    \item \( \lambda: S \times \text{Agt} \rightarrow 2^{\text{Ac}} \) is the function that assigns to each agent \( i \) in state \( g \) a set of actions \( \text{Ag}(i) \) feasible for \( i \) in \( g \), and the joint actions \( g - g' \) are involved;
+    \item \( \delta: S \times \text{Ac}^{\text{Agt}} \rightarrow S \) is the transition function, which defines the transition of states based on joint actions \( g \), \( \delta(a_1,...,a_k) \) results in \( \delta(g,(a_1,...,a_k)) \) being the next state, where \( a_i \in \text{Ag}(i) \);
+    \item \( L: \text{AP} \rightarrow 2^S \) is the function that labels each state with the set of atomic propositions that hold in that state.
+\end{itemize}
+
+The path of \( G \) is a sesuence of states that can potentially be infinite: \( g_0g_1g_2... \), starting with an initial state, where for each \( i > 0 \), there exists \( a_i \in \text{Ac}^{\text{Agt}} \) such that \( g_{i+1} = \delta(g_i,a_i) \), which is the next state after taking action \( a_i \) from state \( g_i \).
+  
+\end{definition} 
