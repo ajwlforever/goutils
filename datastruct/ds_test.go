@@ -13,6 +13,7 @@ func TestHeap(t *testing.T) {
 	fmt.Println(h)
 	fmt.Println(heap.Pop(h))
 }
+
 func TestPriorityQueue(t *testing.T) {
 	items := map[string]int{
 		"banana": 3, "apple": 2, "pear": 4,
@@ -42,4 +43,10 @@ func TestPriorityQueue(t *testing.T) {
 	pp(pq)
 	pq.update(item, "pipe", 10)
 	pp(pq)
+}
+
+func TestSort1(t *testing.T){
+	s := []int{5, 2, 6, 3, 1, 4} // unsorted
+    sort.Sort(sort.Reverse(sort.IntSlice(s)))
+    fmt.Println(s)
 }
