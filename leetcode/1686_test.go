@@ -3,7 +3,6 @@ package leetcode
 import (
 	"fmt"
 	"sort"
-	"testing"
 )
 
 type Score struct {
@@ -58,8 +57,8 @@ func stoneGameVI1(aliceValues []int, bobValues []int) int {
 
 }
 
-func TestMain(m *testing.M) {
-	fmt.Println(stoneGameVI1([]int{3, 1}, []int{2, 1}))
-	fmt.Println(stoneGameVI1([]int{1, 2}, []int{3, 1}))
-	fmt.Println(stoneGameVI1([]int{2, 4, 3}, []int{1, 6, 7}))
-}
+// func TestMain(m *testing.M) {
+// 	fmt.Println(stoneGameVI1([]int{3, 1}, []int{2, 1}))
+// 	fmt.Println(stoneGameVI1([]int{1, 2}, []int{3, 1}))
+// 	fmt.Println(stoneGameVI1([]int{2, 4, 3}, []int{1, 6, 7}))
+// }
